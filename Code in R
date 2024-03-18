@@ -1,0 +1,28 @@
+rm(list = ls())
+
+library(kknn)
+library(dplyr)
+
+irisdata <- read.table("iris.txt")
+
+mappeddata <- c("setosa" = 1 ,"versicolor" = 2 ,"virginica" = 3)
+irisdata$Species<- mappeddata[irisdata$Species]
+
+filtereddata <- irisdata[,1:4]
+
+head(irisdata)
+
+set.seed(1)
+
+fviz_nbclust(filtereddata, FUNcluster = kmeans, method ="wss", linecolor = "purple")
+
+kmeans <- kmeans(filtereddata,centers=4,nstart=25)
+
+str(kmeans)
+predicted <- kmeans$cluster
+
+accuracy <- sum(predicted == irisdata[,5]) / nrow(irisdata)
+accuracy
+
+### Elbow Curve Showed Optimal MSE at 3 Clusters ###
+### Later built model that classified new flower data into certain species (could not find code) ###
